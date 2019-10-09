@@ -8,6 +8,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(60);
 
+  // initialize stars
   generateFallingStars();
   generateStars();
 }
@@ -15,20 +16,27 @@ function setup() {
 function draw() {
   background(12, 26, 75);
 
-  // stars
+  // animate stars
   animateFallingStars();
   pulseStars();
 
-  // landscape
+  // draw landscape
   landscape.draw();
 
-  instructions();
+  // sketch instructions
+  drawInstructions();
 }
 
+/**
+ * Responsive sketch
+ */
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+/**
+ * Create new falling star on mouse click
+ */
 function mouseClicked() {
   const size = 10;
   const seed = random() * 1000;
@@ -38,7 +46,10 @@ function mouseClicked() {
   allFallingStars.push(tempStar);
 }
 
-function instructions() {
+/**
+ * Draw instructions
+ */
+function drawInstructions() {
   textAlign(CENTER, CENTER);
   textSize(18);
   text('Click to create new falling stars', windowWidth / 2, windowHeight - 60);
@@ -76,6 +87,7 @@ function FallingStar(_x, _y, _size, _seed, _regenerate) {
   // animate star
   this.move = function () {
     if (this.regenerate == true) {
+      // reset star when not initialized or outside canvas
       if (
         (this.x == -1 && this.y == -1) ||
         this.x > windowWidth * 2 ||
@@ -112,6 +124,9 @@ function generateFallingStars() {
   }
 }
 
+/**
+ * Animate falling stars
+ */
 function animateFallingStars() {
   for (var i = 0; i < allFallingStars.length; i++) {
     const tempStar = allFallingStars[i];
@@ -168,6 +183,9 @@ function generateStars() {
   }
 }
 
+/**
+ * Animate generic stars
+ */
 function pulseStars() {
   for (var i = 0; i < amountOfStars; i++) {
     const tempStar = allStars[i];
@@ -186,6 +204,7 @@ let landscape = {
     b: 29
   },
   height: (innerHeight / 4) * 3,
+  // generate landscape
   draw: function() {
     for (let x = 0; x < width; x++) {
       const landscapeLineHeight = this.height + noise(x * 0.005) * 50;
